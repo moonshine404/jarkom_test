@@ -12,4 +12,52 @@ class MyTopo(Topo):
   def __init__(self,**opts):
     Topo.__init__(self,**otps)
     
-    H1 = self
+    H1 = self.addHost( ‘H1’, ip=’10.0.0.1/24’ )
+    H2 = self.addHost( ‘H2’, ip=’10.0.0.2/24’ )
+    H3 = self.addHost( ‘H3’, ip=’10.0.0.3/24’ )
+    H4 = self.addHost( ‘H4’, ip=’10.0.0.4/24’ )
+    H5 = self.addHost( ‘H5’, ip=’10.0.0.5/24’ )
+    H6 = self.addHost( ‘H6’, ip=’10.0.0.6/24’ )
+    
+    S1 = self.addSwitch( ‘S1’ )
+    S2 = self.addSwitch( ‘S2’ )
+    
+    self.addLink( H1, S1 )
+    self.addLink( H2, S1 )
+    self.addLink( H3, S1 )
+    self.addLink( H4, S2 )
+    self.addLink( H5, S2 )
+    self.addLink( H6, S2 )
+    self.addLink( S1, S2, bw=100 )
+    
+ def runTopo(): 
+   os.system('mn -cc')
+    
+   topo = MyTopo()
+   net = Mininet(topo=topo, hostCPULimitedHost, Link=TCLink)
+   net.start()
+    
+   print net[‘H1’].cmd(‘sysctl –w net.ipv4.tcp_congestion_control=[reno/vegas]’)
+   print net[‘H2’].cmd(‘sysctl –w net.ipv4.tcp_congestion_control=[reno/vegas]’)
+   print net[‘H3’].cmd(‘sysctl –w net.ipv4.tcp_congestion_control=[reno/vegas]’)
+   print net[‘H4’].cmd(‘sysctl –w net.ipv4.tcp_congestion_control=[reno/vegas]’)
+   print net[‘H5’].cmd(‘sysctl –w net.ipv4.tcp_congestion_control=[reno/vegas]’)
+   print net[‘H6’].cmd(‘sysctl –w net.ipv4.tcp_congestion_control=[reno/vegas]’)
+    
+   h1, h2, h3, h4, h5, 56 = net.get (‘H1’, ‘H2’, ‘H3’, ‘H4’, ‘H5’, ‘H6’)
+   
+   h6.cmd(‘iperf –s&’)
+   h5.cmd(‘iperf –c 10.0.0.6&’)
+   h4.cmd(‘iperf –c 10.0.0.6&’)
+   h2.cmd(‘iperf –c 10.0.0.6&’)
+   h3.cmd(‘iperf –c 10.0.0.6&’)
+   h1.cmd(‘iperf –c 10.0.0.6 –i 1&’)
+   time.sleep(15)
+     
+   h1.cmdPrint(‘fg’)
+   CLI(net)
+   net.stop()
+   
+ if __name__== ‘__main__’:
+  setLogLevel(‘info’)
+  runTopo()
