@@ -1,0 +1,15 @@
+from mininet.topo import Topo
+from mininet.net import Mininet
+from mininet.node import Node
+from mininet.log import setLogLevel, info
+from mininet.cli import CLI
+from mininet.link import TCLink
+from mininet.node import CPULimitedHost
+import time
+import os
+
+class MyTopo(Topo):
+  def __init__(self,**opts):
+    Topo.__init__(self,**otps)
+    
+    H1 = self
