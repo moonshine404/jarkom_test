@@ -24,16 +24,16 @@ if '__main__' == __name__:
     	bwlink={'bw':1}
     	bwlink2={'bw':0.5}
 
-    	net.addLink(r1,h1,cls=TCLink, bwlink) #r1-eth0 h1-eth0
-    	net.addLink(r1,r3,cls=TCLink, bwlink2) #r1-eth1 r3-eth0
-    	net.addLink(r1,r4,cls=TCLink, bwlink) #r1-eth2 r4-eth1
+    	net.addLink(r1,h1,cls=TCLink,**bwlink) #r1-eth0 h1-eth0
+    	net.addLink(r1,r3,cls=TCLink,**bwlink2) #r1-eth1 r3-eth0
+    	net.addLink(r1,r4,cls=TCLink,**bwlink) #r1-eth2 r4-eth1
 
-    	net.addLink(r2,h1,cls=TCLink, bwlink) #r2-eth0 h1-eth1
-    	net.addLink(r2,r4,cls=TCLink, bwlink2) #r2-eth1 r4-eth0(note)
-    	net.addLink(r2,r3,cls=TCLink, bwlink) #r2-eth2 r3-eth1
+    	net.addLink(r2,h1,cls=TCLink,**bwlink) #r2-eth0 h1-eth1
+    	net.addLink(r2,r4,cls=TCLink,**bwlink2) #r2-eth1 r4-eth0(note)
+    	net.addLink(r2,r3,cls=TCLink,**bwlink) #r2-eth2 r3-eth1
 
-    	net.addLink(r3,h2,cls=TCLink, bwlink) #r3-eth2 h2-eth0
-    	net.addLink(r4,h2,cls=TCLink, bwlink) #r4-eth2 h2-eth1
+    	net.addLink(r3,h2,cls=TCLink,**bwlink) #r3-eth2 h2-eth0
+    	net.addLink(r4,h2,cls=TCLink,**bwlink) #r4-eth2 h2-eth1
 
     	net.build()
 
@@ -79,3 +79,6 @@ if '__main__' == __name__:
 	r4.cmd("ifconfig r4-eth1 192.168.5.1 netmask 255.255.255.0")
 	r4.cmd("ifconfig r4-eth2 192.168.4.2 netmask 255.255.255.0")
 	r4.cmd("echo 1 > /proc/sys/net/ipv4/ip_forward")
+	
+	CLI(net)
+	net.stop()
